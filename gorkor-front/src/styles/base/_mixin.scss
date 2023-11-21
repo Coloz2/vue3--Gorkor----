@@ -1,0 +1,50 @@
+@mixin flex-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-box2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+//混合注入 设置参数 和默认值center
+@mixin flex-box-set($jc: center, $ai: center) {
+  @include flex-box();
+  @if ($jc == center) {
+    justify-content: center;
+  }
+  @if ($jc == start) {
+    justify-content: flex-start;
+  }
+  @if ($jc == flex-end) {
+    justify-content: flex-end;
+  }
+  @if ($jc == end) {
+    justify-content: end;
+  }
+  @if ($jc == space-between) {
+    justify-content: space-between;
+  }
+  @if ($ai == center) {
+    align-items: center;
+  }
+  @if ($ai == flex-start) {
+    align-items: flex-start;
+  }
+  @if ($ai == flex-end) {
+    align-items: flex-end;
+  }
+  @if ($ai == stretch) {
+    align-items: stretch;
+  }
+}
+
+//设置宽高
+@mixin wh($w, $h) {
+  width: $w;
+  height: $h;
+}

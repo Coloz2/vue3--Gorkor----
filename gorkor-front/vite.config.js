@@ -15,7 +15,7 @@ export default defineConfig({
       scss: {
         // 自动导入scss文件
         additionalData: `
-  
+        @use "@/styles/base/_mixin.scss" as *;
           @use "@/styles/base/_varcolor.scss" as *;
         `,
       },

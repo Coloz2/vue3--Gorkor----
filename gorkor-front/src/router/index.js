@@ -2,7 +2,7 @@
 
 import { createRouter, createWebHistory } from "vue-router";
 import Layout from "@/views/layout/index.vue";
-import home from "@/views/layout/component/home.vue";
+import home from "@/views/layout/component/home/home.vue";
 
 const routes = [
   {
@@ -18,12 +18,12 @@ const routes = [
       {
         path: "/island",
         name: "island",
-        component: () => import("@/views/layout/component/island.vue"),
+        component: () => import("@/views/island/island.vue"),
       },
       {
         path: "/mine",
         name: "mine",
-        component: () => import("@/views/layout/component/mine.vue"),
+        component: () => import("@/views/mine/mine.vue"),
       },
     ],
   },
