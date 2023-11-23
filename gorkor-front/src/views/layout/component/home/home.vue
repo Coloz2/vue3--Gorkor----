@@ -1,6 +1,14 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import navButton from "./component/navButton.vue";
+
+// import { one } from "@/api/1.js";
+// const getbanner = async () => {
+//   const res = await one();
+//   console.log(res);
+// };
+
+// onMounted(() => getbanner());
 </script>
 
 <template>
@@ -9,14 +17,16 @@ import navButton from "./component/navButton.vue";
       <span class="home_head_span">过客</span>
     </div>
     <nav class="home_nav">
-      <navButton bgcColor="#ce9294">
-        <template #bphoto>
-          <img src="@/assets/images/home.png" class="bphoto" alt="" />
-        </template>
-        <template #title>
-          <span class="home_nav_title">写信</span>
-        </template>
-      </navButton>
+      <router-link to="/writeLetter">
+        <navButton bgcColor="#ce9294">
+          <template #bphoto>
+            <img src="@/assets/images/home.png" class="bphoto" alt="" />
+          </template>
+          <template #title>
+            <span class="home_nav_title">写信</span>
+          </template>
+        </navButton>
+      </router-link>
 
       <navButton bgcColor="#8da4d0">
         <template #bphoto>
@@ -55,13 +65,13 @@ import navButton from "./component/navButton.vue";
       </div>
       <div class="home_feature_fbutton">
         <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
+          <img src="/src/assets/images/home.png" class="img" alt="" />
         </div>
         <span>树洞</span>
       </div>
       <div class="home_feature_fbutton">
         <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
+          <img src="@\\assets\\images\\home.png" class="img" alt="" />
         </div>
         <span>树洞</span>
       </div>

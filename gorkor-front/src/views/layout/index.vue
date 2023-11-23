@@ -64,6 +64,7 @@ const pageChange = (index) => {
 
   &_nav {
     height: 5rem;
+    z-index: 100;
     position: absolute;
     width: 100%;
     bottom: 0;

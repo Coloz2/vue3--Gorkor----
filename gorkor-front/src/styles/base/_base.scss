@@ -20,3 +20,10 @@ body {
   height: 100%;
   color: #333;
 }
+
+.router-link-active,
+.router-link-exact-active,
+a {
+  color: inherit; /* 移除紫色，使用继承的颜色 */
+  text-decoration: none; /* 移除下划线 */
+}

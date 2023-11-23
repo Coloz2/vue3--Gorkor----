@@ -6,7 +6,7 @@ const frontNavModel = async () => {
     "frontHomeNav",
     {
       imageUrl: {
-        type: DataTypes.STRING, // 假设您使用整数作为用户ID
+        type: DataTypes.STRING, //
         allowNull: false,
       },
       title: {

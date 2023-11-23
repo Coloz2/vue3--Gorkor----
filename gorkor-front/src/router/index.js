@@ -27,6 +27,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/writeLetter",
+    name: "write",
+    component: () => import("@/views/writeLetter/index.vue"),
+  },
 ];
 
 const router = createRouter({
