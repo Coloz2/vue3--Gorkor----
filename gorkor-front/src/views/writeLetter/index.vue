@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from "vue";
-import NavHead from "@/components/NavHead.vue";
+import NavHead from "@/components/navHead.vue";
 
 const inputValue = ref("");
 
@@ -10,19 +10,13 @@ const textarea1 = ref(null);
 
 <template>
   <div class="letter">
-    <nav-head class="letter_nav">
+    <nav-head class="letter_nav" :nRoute="'preView'">
       <template #navtitle>
         <span>给TA写信</span>
       </template>
     </nav-head>
     <div class="letter_inputtext">
       <span class="letter_inputtext_statictext_top">亲爱的过客朋友</span>
-      <!-- <textarea
-        class="letter_inputtext_textarea"
-        @input="adjustHeight"
-        placeholder="第一封信总是很难&#10;不如聊聊你最近看过的一本书，&#10;或者一部印象深刻的电影，&#10;说不动TA也看过呢?&#10;&#10;温馨提示：别上来就把笔友当树洞，满满负能量、特别痛苦的信会让TA不知道怎么回~"
-      ></textarea> -->
-
       <el-input
         v-model="textarea1"
         autosize
@@ -30,7 +24,6 @@ const textarea1 = ref(null);
         class="letter_inputtext_textarea"
         placeholder="第一封信总是很难&#10;不如聊聊你最近看过的一本书，&#10;或者一部印象深刻的电影，&#10;说不动TA也看过呢?&#10;&#10;温馨提示：别上来就把笔友当树洞，满满负能量、特别痛苦的信会让TA不知道怎么回~"
       />
-
       <span class="letter_inputtext_statictext_bottom">小心我猹你</span>
       <span class="letter_inputtext_statictext_bottom">2023.11.23</span>
     </div>
@@ -60,7 +53,8 @@ const textarea1 = ref(null);
 
   &_inputtext {
     background-color: #ffffe0; /* 淡黄色 */
-    @include wh(100%, 95vh);
+    width: 100%;
+    min-height: 95vh;
     &_textarea {
       background-color: #ffffe0; /* 淡黄色 */
       width: 100%;

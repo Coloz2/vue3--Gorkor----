@@ -14,7 +14,10 @@ const frontNavModel = async () => {
         allowNull: false,
       },
     },
-    {}
+    {
+      //不生成时间
+      timestamps: false,
+    }
   );
 
   return frontHomeNav;

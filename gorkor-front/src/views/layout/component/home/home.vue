@@ -2,13 +2,19 @@
 import { ref, reactive, onMounted } from "vue";
 import navButton from "./component/navButton.vue";
 
-// import { one } from "@/api/1.js";
-// const getbanner = async () => {
-//   const res = await one();
-//   console.log(res);
-// };
+import { getFeature } from "/gorkor/gorkor-front/src/api/homeRender.js";
 
-// onMounted(() => getbanner());
+//RENDER APIT
+const featureList = ref([]);
+
+const getbanner = async () => {
+  const { data } = await getFeature();
+  featureList.value = data.navSource;
+  console.log(featureList.value);
+};
+
+//LIEFT CIRYLE
+onMounted(() => getbanner());
 </script>
 
 <template>
@@ -57,49 +63,22 @@ import navButton from "./component/navButton.vue";
     </nav>
     <div class="home_brige"></div>
     <div class="home_feature">
-      <div class="home_feature_fbutton">
+      <div
+        class="home_feature_fbutton"
+        v-for="item of featureList"
+        :key="item.id"
+      >
         <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
+          <img
+            :src="`http://localhost:3000/${item.imageUrl}`"
+            class="img"
+            alt=""
+          />
         </div>
-        <span>树洞</span>
-      </div>
-      <div class="home_feature_fbutton">
-        <div class="home_feature_fbutton_photo">
-          <img src="/src/assets/images/home.png" class="img" alt="" />
-        </div>
-        <span>树洞</span>
-      </div>
-      <div class="home_feature_fbutton">
-        <div class="home_feature_fbutton_photo">
-          <img src="@\\assets\\images\\home.png" class="img" alt="" />
-        </div>
-        <span>树洞</span>
-      </div>
-      <div class="home_feature_fbutton">
-        <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
-        </div>
-        <span>树洞</span>
-      </div>
-      <div class="home_feature_fbutton">
-        <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
-        </div>
-        <span>树洞</span>
-      </div>
-      <div class="home_feature_fbutton">
-        <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
-        </div>
-        <span>树洞</span>
-      </div>
-      <div class="home_feature_fbutton">
-        <div class="home_feature_fbutton_photo">
-          <img src="@/assets/images/home.png" class="img" alt="" />
-        </div>
-        <span>树洞</span>
+        <span>{{ item.title }}</span>
       </div>
     </div>
+
     <div class="home_list"></div>
   </div>
 </template>
@@ -146,6 +125,7 @@ import navButton from "./component/navButton.vue";
     height: 18rem;
     background-color: $color-white;
     display: grid;
+    justify-items: center;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
     &_fbutton {
@@ -156,7 +136,8 @@ import navButton from "./component/navButton.vue";
         width: 100%;
         height: 5rem;
         .img {
-          @include wh(100%, 100%);
+          @include wh(400%, 400%);
+          transform: translateX(-37%) translateY(-38%);
         }
       }
     }

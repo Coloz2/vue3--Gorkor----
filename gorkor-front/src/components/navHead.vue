@@ -3,9 +3,20 @@ import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
+//PROPS
+const props = defineProps({
+  nRoute: String,
+});
+
+const nextRoute = ref(props.nRoute);
+
 const goback = () => {
   console.log("!1111");
   router.back();
+};
+
+const goNext = () => {
+  router.push(`/${nextRoute.value}`);
 };
 </script>
 
@@ -17,7 +28,7 @@ const goback = () => {
 
     <slot name="navtitle"></slot>
 
-    <div class="navhead_right">
+    <div class="navhead_right" @click="goNext">
       <img src="@/assets/images/arror.png" alt="" class="img" />
     </div>
   </div>

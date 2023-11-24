@@ -1,18 +1,32 @@
-import Express from "express";
-import multer from "multer";
+import { fileURLToPath } from "url";
 import fs from "fs";
-import path from "path";
-import app from "../app.js";
-import { frontNav } from "../models/rebirth.js";
+import { dirname } from "path";
+import { frontNav } from "./models/rebirth.js";
+import homenavRouter from "./routes/HomeNavRoutes.js";
 
-const uploadDir = path.join(__dirname, "uploads");
+// 获取当前模块的文件路径
+const __filename = fileURLToPath(import.meta.url);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null, fileName);
-  },
+// 获取目录名
+const __dirname = dirname(__filename);
+
+//读取images图片文件夹
+const imagesDir = path.join(__dirname, "images", "front-nav");
+
+const imageFiles = fs.readdirSync(imagesDir);
+
+//将路径复制
+imageFiles.forEach(async (filename) => {
+  const imgPath = path.join("gorkor-back", "images", "front-nav", filename);
+  // 插入NavFront表;
+  const existingRecord = await frontNav.findOne({
+    where: { imageUrl: imgPath },
+  });
+
+  if (!existingRecord) {
+    await frontNav.create({
+      imageUrl: imgPath,
+      title: filename,
+    });
+  }
 });
