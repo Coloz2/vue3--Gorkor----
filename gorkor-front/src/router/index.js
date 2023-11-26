@@ -28,14 +28,8 @@ const routes = [
     ],
   },
   {
-    path: "/writeLetter",
-    name: "write",
-    component: () => import("@/views/writeLetter/index.vue"),
-  },
-  {
-    path: "/writeLetter",
-    name: "write",
-    component: () => import("@/views/writeLetter/index.vue"),
+    path: "/write",
+    component: () => import("@/views/write/index.vue"),
   },
   {
     path: "/preView",

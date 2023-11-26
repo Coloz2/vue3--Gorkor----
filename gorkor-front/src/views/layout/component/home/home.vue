@@ -1,11 +1,12 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import navButton from "./component/navButton.vue";
-
 import { getFeature } from "/gorkor/gorkor-front/src/api/homeRender.js";
 
 //RENDER APIT
 const featureList = ref([]);
+const route = useRouter();
 
 const getbanner = async () => {
   const { data } = await getFeature();
@@ -13,6 +14,9 @@ const getbanner = async () => {
   console.log(featureList.value);
 };
 
+const junmpL = () => {
+  route.push("/island");
+};
 //LIEFT CIRYLE
 onMounted(() => getbanner());
 </script>
@@ -23,7 +27,7 @@ onMounted(() => getbanner());
       <span class="home_head_span">过客</span>
     </div>
     <nav class="home_nav">
-      <router-link to="/writeLetter">
+      <router-link to="/write">
         <navButton bgcColor="#ce9294">
           <template #bphoto>
             <img src="@/assets/images/home.png" class="bphoto" alt="" />
@@ -70,6 +74,7 @@ onMounted(() => getbanner());
       >
         <div class="home_feature_fbutton_photo">
           <img
+            @click="junmpL"
             :src="`http://localhost:3000/${item.imageUrl}`"
             class="img"
             alt=""
@@ -96,6 +101,7 @@ onMounted(() => getbanner());
     &_span {
       color: #5d5d5d;
       font-size: 1.8rem;
+      line-height: 5rem;
     }
     background-color: $color-white;
     height: 5rem;

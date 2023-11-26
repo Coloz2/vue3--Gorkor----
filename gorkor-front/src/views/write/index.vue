@@ -1,10 +1,31 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, watchEffect, nextTick, getTransitionRawChildren } from "vue";
 import NavHead from "@/components/navHead.vue";
+import { useletterStore } from "@/stores/letterData.js";
 
-const inputValue = ref("");
+const textarea1 = ref("");
+const ListStroe = useletterStore();
+const myTextarea = ref(null); // 创建 ref
 
-const textarea1 = ref(null);
+const sendData = () => {
+  // const letterList = textarea1.value.split(/\r?\n|\r/);
+  console.log(textarea1.value.split(""));
+  const hero = document.querySelector(".hero");
+  console.log(hero.offsetWidth);
+  console.log(hero.getBoundingClientRect());
+  ListStroe.createLetter({ own: textarea1 });
+};
+
+// const checkOverflow = () => {
+//   // 通过 .value 访问引用的元素
+//   const aa = document.querySelector(".letter_inputtext_textarea");
+//   console.log(aa);
+// };
+
+// watchEffect(() => {
+//   checkOverflow();
+// });
+
 ///方法
 </script>
 
@@ -12,13 +33,16 @@ const textarea1 = ref(null);
   <div class="letter">
     <nav-head class="letter_nav" :nRoute="'preView'">
       <template #navtitle>
-        <span>给TA写信</span>
+        <span @click="sendData">给TA写信</span>
       </template>
+      {{ textarea1 }}
     </nav-head>
     <div class="letter_inputtext">
       <span class="letter_inputtext_statictext_top">亲爱的过客朋友</span>
+      <span class="hero">.</span>
       <el-input
         v-model="textarea1"
+        ref="myTextarea"
         autosize
         type="textarea"
         class="letter_inputtext_textarea"
@@ -35,6 +59,8 @@ const textarea1 = ref(null);
   background-color: #ffffe0; /* 淡黄色 */
   box-shadow: none;
   caret-color: red;
+  resize: none;
+  overflow: hidden;
 }
 
 :deep(.el-textarea__inner:focus) {
@@ -69,6 +95,18 @@ const textarea1 = ref(null);
     }
 
     &_statictext {
+      &_line {
+        position: absolute;
+        z-index: 3;
+        width: 100%;
+        height: calc(100vh - 5rem);
+        &_test {
+          height: 45px;
+          width: 100%;
+          border-bottom: 2px saddlebrown solid;
+        }
+      }
+
       span {
         font-weight: bold;
       }

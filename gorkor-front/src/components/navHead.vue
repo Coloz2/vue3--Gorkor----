@@ -38,6 +38,10 @@ const goNext = () => {
 .navhead {
   height: 5rem;
   @include flex-box();
+  background-color: rgb(171, 171, 171);
+  position: fixed;
+  z-index: 10;
+  width: 100%;
   &_left {
     @include wh(100%, 100%);
     flex: 1;
