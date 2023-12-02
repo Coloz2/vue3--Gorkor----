@@ -29,7 +29,7 @@ const goNext = () => {
     <slot name="navtitle"></slot>
 
     <div class="navhead_right" @click="goNext">
-      <img src="@/assets/images/arror.png" alt="" class="img" />
+      <slot name="navright"></slot>
     </div>
   </div>
 </template>
@@ -38,24 +38,23 @@ const goNext = () => {
 .navhead {
   height: 5rem;
   @include flex-box();
-  background-color: rgb(171, 171, 171);
+  background-color: rgb(255, 255, 255);
   position: fixed;
   z-index: 10;
-  width: 100%;
+  width: 100vw;
   &_left {
-    @include wh(100%, 100%);
     flex: 1;
+    transform: rotate(180deg);
+    @include flex-box-set(center, center);
     .img {
-      @include wh(100%, 100%);
+      // margin: 0 auto;
+      @include wh(60%, 60%);
     }
   }
 
   &_right {
-    @include wh(100%, 100%);
+    @include flex-box-set(center, center);
     flex: 1;
-    .img {
-      @include wh(100%, 100%);
-    }
   }
 }
 </style>

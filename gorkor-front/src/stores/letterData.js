@@ -5,12 +5,17 @@ export const useletterStore = defineStore("letter", () => {
   const letterObj = ref({});
 
   const createLetter = (data) => {
-    console.log(data);
-    Object.assign(letterObj.value, data);
+    letterObj.value.own = { count: "0", content: `${data}` };
+  };
+
+  const INCREMENT_COUNT = (num) => {
+    console.log("svvv" + num);
+    letterObj.value.own.count = num;
   };
 
   return {
     letterObj,
     createLetter,
+    INCREMENT_COUNT,
   };
 });

@@ -36,6 +36,20 @@ const routes = [
     name: "priView",
     component: () => import("@/views/preView/index.vue"),
   },
+  {
+    path: "/send",
+    name: "send",
+    component: () => import("@/views/send/index.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/login/index.vue"),
+  },
+  {
+    path: "/test",
+    component: () => import("@/views/text.vue"),
+  },
 ];
 
 const router = createRouter({

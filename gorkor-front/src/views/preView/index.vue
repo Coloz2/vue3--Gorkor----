@@ -1,73 +1,149 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import EventBus from "@/components/EventBus.js";
+import { ref, reactive, onMounted, onBeforeUnmount, computed } from "vue";
+import letterPage from "@/components/letterPage.vue";
+import popupBox from "./components/popupBox.vue";
 import NavHead from "@/components/navHead.vue";
 import { useletterStore } from "@/stores/letterData.js";
-
 const ListStroe = useletterStore();
-const letterList = ref();
-const test = ref("hhhhhhhhh<br>hggg<br>rgrg");
+//最终数据
 const replacedArray = ref();
-onMounted(() => {
-  console.log(ListStroe.letterObj);
-  const values = Object.values(ListStroe.letterObj);
-  letterList.value = values.flat();
-  console.log(letterList.value);
-  replacedArray.value = letterList.value.map((el) =>
-    el.replace(/\n/g, "<br />")
+//弹出层控制
+const show = ref(true);
+
+//获取内容
+const getLetterContent = () => {
+  //获取信件内容  对象的value
+  // console.log(Object.values(ListStroe.letterObj)[1]);
+  console.log(ListStroe.letterObj.own.content);
+  replacedArray.value = Object.values(ListStroe.letterObj.own).map((str) =>
+    str.replace(/\n/g, "<br/>")
   );
 
-  console.log(letterList.value.length);
+  replacedArray.value = `亲爱的过客朋友<br />${replacedArray.value[1]}<br /><div class="sb"><p>小心我猹你</p><p>11.28</p><div>`;
+  // console.log(replacedArray.value);
+  // console.log(replacedArray.value);
+};
+
+const showBox = () => {
+  show.value = false;
+};
+
+onMounted(() => {
+  getLetterContent();
 });
 
-const print = () => {
-  const a = document.querySelector(".priview_body_content");
-  //窗体宽度
-  const b = document.querySelector(".priview_body");
-  console.log(b.clientWidth);
-  document.querySelector.content;
-  console.log(a);
-  //页数
-  const count = Math.ceil((a.clientHeight + 20) / 720);
-  console.log("========================");
-  console.log(count);
-  b.style.width = b.clientWidth * count;
-  b.style.columnCount = Number(count);
-  console.log(count);
+//页数
+const counts = computed(() => ListStroe.letterObj.own.count);
+//当前页数
+const curCts = ref(1);
+//移动距离
+let distance = 0;
+//吸附百分比
+let moveVw = 0;
+// 视口宽度
+let startX = 0;
+//
+const letterwindow = ref(null);
+const handleup = () => {
+  if (counts.value == 1) return;
+  const bodyWidth = letterwindow.value.clientWidth;
+  const riseArea = Math.abs(distance) / bodyWidth;
+  console.log(moveVw);
+  console.log("移动距离" + distance);
+  console.log(riseArea);
+  //鼠标滑动距离大于视口宽度一半  向右滑
+  if (riseArea > 0.5 && moveVw >= 0) {
+    if (distance > 0) {
+      console.log("大于50 右移");
+      console.log(distance);
+      moveVw += 100;
+      curCts.value += 1;
+      letterwindow.value.style.transform = `translateX(-${moveVw}vw)`;
+    } else {
+      console.log("大于50 左移");
+      console.log(distance);
+      curCts.value -= 1;
+      moveVw -= 100;
+      letterwindow.value.style.transform = `translateX(-${moveVw}vw)`;
+    }
+  } else {
+    //移动距离小于0.5  在第一页
+    letterwindow.value.style.transform = `translateX(-${moveVw}vw)`;
+    // }
+    console.log(distance);
+    distance = 0;
+  }
+};
+
+const handleDown = (e) => {
+  if (counts.value == 1) return;
+  startX = e.x;
+};
+
+const handleMove = (event) => {
+  if (counts.value == 1) return;
+  let moveX = event.x;
+  distance = startX - moveX;
+  console.log(distance);
+  //在第一页不能左移 第二页不能右移
+  if (
+    (curCts.value == 1 && distance < 0) ||
+    (curCts.value == counts.value && distance > 0)
+  ) {
+    return;
+  }
+
+  letterwindow.value.style.transform = `translateX(calc(-${moveVw}vw - ${distance}px))`;
 };
 </script>
 
 <template>
-  <div class="priview">
+  <div
+    class="priview"
+    @pointerdown="handleDown"
+    @pointermove="handleMove"
+    @pointerup="handleup"
+  >
     <nav-head class="priview_nav">
       <template #navtitle>
         <span @click="print">信件预览</span>
       </template>
     </nav-head>
 
-    <div class="priview_body">
-      <!-- <div
-        class="priview_body_test"
-        v-for="(item, index) in letterList"
-        :key="index"
-      >
-        <span class="priview_body_statictext_top">{{ item }}</span>
-      </div> -->
-      <div class="priview_body_line">
-        <div
-          class="priview_body_line_test"
-          v-for="item in 16"
-          :key="item"
-        ></div>
-      </div>
-      <div class="priview_body_content">
-        <p v-html="replacedArray"></p>
-      </div>
+    <div ref="letterwindow">
+      <letter-page :letter-content="replacedArray"></letter-page>
     </div>
+
+    <!-- 弹出层 -->
+    <div class="priview_popup" @click="showBox">
+      <span>信纸模板</span>
+      <span class="priview_popup_count">{{ curCts }}/{{ counts }}</span>
+    </div>
+
+    <popup-box v-model:isShow="show"></popup-box>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 388px;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 :deep(.el-textarea__inner) {
   background-color: transparent; //背景设置透明
   box-shadow: none;
@@ -85,6 +161,7 @@ const print = () => {
 
 .priview {
   width: 100%;
+  position: fixed;
   &_nav {
     span {
       flex: 6;
@@ -93,60 +170,21 @@ const print = () => {
     }
   }
 
-  &_body {
-    height: calc(100vh - 5rem);
-    background: url("@/assets/images/fe.jpg");
-    background-size: 10px 50px; /* 具体尺寸，填充整个 div */
-    // background-repeat: no-repeat; /* 防止图片平铺 */
-    transform: translateY(5rem);
-    font-size: 1.5rem;
-    .img {
-      left: 0;
-      @include wh(100%, 100%);
+  &_popup {
+    @include wh(100vw, 6rem);
+    background-color: $color-white;
+    opacity: 0.85;
+    position: fixed;
+    bottom: 0;
+    color: $click-color;
+    @include flex-box-set(center, center);
+    font-size: 1.8rem;
+    z-index: 9;
+    span {
+      margin-left: auto;
     }
-
-    &_content {
-      line-height: 45px;
-      font-size: 20px;
-      column-width: 370px;
-      height: 80%;
-      padding-left: 2.2rem;
-    }
-    &_line {
-      position: absolute;
-      z-index: 3;
-      width: 100%;
-      height: calc(100vh - 5rem);
-      &_test {
-        height: 45px;
-        width: 95%;
-        transform: translateX(3%);
-        border-bottom: 2px saddlebrown solid;
-      }
-    }
-
-    &_test {
-      border-bottom: 1px saddlebrown solid;
-      height: 6.25%;
-      width: 95%;
-      transform: translateX(5%);
-    }
-
-    &_statictext {
-      span {
-        font-weight: bold;
-      }
-      &_top {
-        padding: 1rem;
-        font-size: 1.8rem;
-      }
-
-      &_bottom {
-        @include flex-box2;
-        align-items: flex-end;
-        padding: 0.5rem;
-        font-size: 1.8rem;
-      }
+    &_count {
+      margin-left: auto;
     }
   }
 }

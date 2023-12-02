@@ -9,11 +9,12 @@ const myTextarea = ref(null); // 创建 ref
 
 const sendData = () => {
   // const letterList = textarea1.value.split(/\r?\n|\r/);
-  console.log(textarea1.value.split(""));
-  const hero = document.querySelector(".hero");
-  console.log(hero.offsetWidth);
-  console.log(hero.getBoundingClientRect());
-  ListStroe.createLetter({ own: textarea1 });
+
+  // const hero = document.querySelector(".hero");
+  // console.log(hero.offsetWidth);
+  // console.log(hero.getBoundingClientRect());
+  console.log(textarea1.value);
+  ListStroe.createLetter(textarea1.value);
 };
 
 // const checkOverflow = () => {
@@ -33,13 +34,21 @@ const sendData = () => {
   <div class="letter">
     <nav-head class="letter_nav" :nRoute="'preView'">
       <template #navtitle>
-        <span @click="sendData">给TA写信</span>
+        <span>给TA写信</span>
+      </template>
+
+      <template #navright>
+        <img
+          src="@/assets/images/eyes.png"
+          @click="sendData"
+          class="img"
+          alt=""
+        />
       </template>
       {{ textarea1 }}
     </nav-head>
     <div class="letter_inputtext">
       <span class="letter_inputtext_statictext_top">亲爱的过客朋友</span>
-      <span class="hero">.</span>
       <el-input
         v-model="textarea1"
         ref="myTextarea"
@@ -56,7 +65,7 @@ const sendData = () => {
 
 <style lang="scss" scoped>
 :deep(.el-textarea__inner) {
-  background-color: #ffffe0; /* 淡黄色 */
+  background-color: #faf7ea; /* 淡黄色 */
   box-shadow: none;
   caret-color: red;
   resize: none;
@@ -70,6 +79,10 @@ const sendData = () => {
 
 .letter {
   &_nav {
+    img {
+      @include wh(60%, 60%);
+      margin: 0 auto;
+    }
     span {
       flex: 6;
       font-size: 1.5rem;
@@ -78,11 +91,12 @@ const sendData = () => {
   }
 
   &_inputtext {
-    background-color: #ffffe0; /* 淡黄色 */
+    background-color: #faf7ea; /* 淡黄色 */
     width: 100%;
-    min-height: 95vh;
+    min-height: calc(100vh - 5rem);
+    transform: translateY(5rem);
     &_textarea {
-      background-color: #ffffe0; /* 淡黄色 */
+      background-color: #faf7ea; /* 淡黄色 */
       width: 100%;
       border: none; /* 无边框 */
       outline: none; /* 点击时不显示轮廓 */
