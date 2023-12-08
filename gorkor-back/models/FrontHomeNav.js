@@ -6,7 +6,7 @@ const frontNavModel = async () => {
     "frontHomeNav",
     {
       imageUrl: {
-        type: DataTypes.STRING, //
+        type: DataTypes.STRING,
         allowNull: false,
       },
       title: {

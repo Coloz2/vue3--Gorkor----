@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, nextTick } from "vue";
+import { ref, reactive, onMounted, watch, nextTick, watchEffect } from "vue";
 
 import { useletterStore } from "@/stores/letterData.js";
 
@@ -39,26 +39,40 @@ const print = () => {
   box.style.columnWidth = `${cWidth}px`;
   //背景图片样式
   bgsize.value = {
-    "background-size": `${cWidth}px 100%`,
+    "background-size": `100vw 100%`,
     width: `${Number(cWidth) * Number(count.value) + 22 * count.value}px `,
   };
 };
 
+const props = defineProps({
+  letterContent: String,
+  imageUrl: {
+    type: String,
+  },
+});
+
+// const imageUrl = `http://localhost:3000/images/paper/rose-01.jpg`;
 onMounted(() => {
+  bg.value.style.background = `url(http://localhost:3000/images/paper/rose-01.jpg) repeat-x`;
   //在页面渲染完成后计算
   nextTick(() => {
     print();
   });
 });
 
-const props = defineProps({
-  letterContent: String,
-});
+watch(
+  () => props.imageUrl,
+  (newImageUrl) => {
+    const normalizedImageUrl = newImageUrl.replace(/\\/g, "/");
+    bg.value.style.background = `url(http://localhost:3000/${normalizedImageUrl}) repeat-x`;
+  }
+);
 </script>
 
 <template>
   <div class="priview_body">
     <div class="priview_body_content" ref="divBox">
+      {{ props.imageUrl }}
       <p ref="divContent" v-html="letterContent"></p>
     </div>
 
@@ -96,9 +110,10 @@ const props = defineProps({
   &_bg {
     top: 0;
     height: 100%;
+
+    // background-size: cover;
     position: absolute;
     z-index: -10;
-    background: url("@/assets/images/bgc-rose.jpg") repeat-x;
   }
 
   &_line {

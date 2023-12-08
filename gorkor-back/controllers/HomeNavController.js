@@ -1,4 +1,5 @@
 import { frontNav } from "../models/rebirth.js";
+import { writingBg } from "../models/rebirth.js";
 
 const getAll = async (req, res) => {
   try {
@@ -15,4 +16,19 @@ const getAll = async (req, res) => {
   }
 };
 
-export { getAll };
+const getAllBg = async (req, res) => {
+  try {
+    const navSource = await writingBg.findAll();
+    res.json({
+      status: "susscess",
+      navSource,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
+export { getAll, getAllBg };

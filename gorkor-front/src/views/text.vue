@@ -1,6 +1,5 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-
 const handleDown = () => {
   console.log("单击");
 
@@ -9,18 +8,20 @@ const handleDown = () => {
     console.log("移动");
   };
 
-  const handleup = () => {
+  const handleUp = () => {
     console.log("松开");
-    window.removeEventListener("pointermove", handleMove);
+    // 在松开事件处理函数内取消移动事件的注册
+    document.removeEventListener("touchmove", handleMove);
   };
 
-  window.addEventListener("pointermove", handleMove);
-  window.addEventListener("pointerup", handleup);
+  // 在单击事件处理函数内注册移动和松开事件
+  document.addEventListener("touchmove", handleMove);
+  document.addEventListener("touchend", handleUp);
 };
 </script>
 
 <template>
-  <div class="sb" @pointerdown="handleDown"></div>
+  <div class="sb" @touchstart="handleDown"></div>
 </template>
 
 <style lang="scss" scoped>

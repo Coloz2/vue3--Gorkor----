@@ -13,8 +13,13 @@ export const useletterStore = defineStore("letter", () => {
     letterObj.value.own.count = num;
   };
 
+  const SETBGURL = (url) => {
+    letterObj.value.own.bgurl = url;
+  };
+
   return {
     letterObj,
+    SETBGURL,
     createLetter,
     INCREMENT_COUNT,
   };

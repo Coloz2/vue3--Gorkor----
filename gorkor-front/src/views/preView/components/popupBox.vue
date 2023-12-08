@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 // Import Swiper Vue.js components
 // import Swiper core and required modules
 import { FreeMode, Pagination } from "swiper/modules";
@@ -10,7 +10,7 @@ import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";
 import "swiper/scss/scrollbar";
-
+import { getPapperBg } from "@/api/homeRender.js";
 //swiper modules
 const modules = ref([FreeMode, Pagination]);
 defineProps({
@@ -20,12 +20,27 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["update:isShow"]);
+const emit = defineEmits(["update:isShow", "update:bgUrl"]);
 
 const closeBox = () => {
   console.log("333");
   emit("update:isShow", true);
 };
+
+//获取图片资源
+const papperList = ref([]);
+const getpapper = async () => {
+  const { data } = await getPapperBg();
+  papperList.value = data.navSource;
+  console.log(papperList.value);
+};
+
+const changeBg = (url) => {
+  console.log(url);
+  emit("update:bgUrl", url);
+};
+
+onMounted(() => getpapper());
 </script>
 
 <template>
@@ -44,11 +59,14 @@ const closeBox = () => {
         :modules="modules"
         class="mySwiper"
       >
-        <swiper-slide v-for="item in 4" :key="item">
-          <img src="@/assets/images/bgc-rose.jpg" class="img" />
+        <swiper-slide v-for="item in papperList" :key="item">
+          <img
+            :src="`http://localhost:3000/${item.imageUrl}`"
+            class="img"
+            @click="changeBg(item.imageUrl)"
+          />
         </swiper-slide>
         <swiper-slide class="addImg"> </swiper-slide>
-        <div></div>
       </swiper>
     </div>
   </div>

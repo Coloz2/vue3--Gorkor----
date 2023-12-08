@@ -1,5 +1,16 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
+
+const props = defineProps({
+  gcolor: {
+    type: String,
+  },
+});
+
+onMounted(() => {
+  //定义颜色
+  document.documentElement.style.setProperty("--color-cover", props.gcolor);
+});
 // Import Swiper Vue.js components
 </script>
 
@@ -15,7 +26,9 @@ import { ref, reactive } from "vue";
       </div>
     </div>
 
-    <div class="box_stamp"></div>
+    <div class="box_stamp">
+      <img src="@/assets/images/rose-02.jpg" class="img" alt="" />
+    </div>
 
     <div class="box_sendWord">
       <div class="box_sendWord_des">蟒蟒 看猹！</div>
@@ -25,7 +38,6 @@ import { ref, reactive } from "vue";
 
 <style lang="scss" scoped>
 .box {
-  position: absolute;
   background-color: rgb(250, 250, 250);
   height: 48.5rem;
   width: 30rem;
@@ -33,19 +45,23 @@ import { ref, reactive } from "vue";
 
   &_stamp {
     @include wh(7rem, 9rem);
-    background-color: red;
+    background-color: rgb(166, 147, 147);
     position: absolute;
-    outline: 2px solid $color-letter;
+    outline: 2px solid var(--color-cover);
     outline-offset: 3px;
     top: 2rem;
     left: 2rem;
+    .img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &_type {
     font-size: 1.6rem;
     @include wh(3rem, 13rem);
     color: white;
-    background-color: $color-letter;
+    background-color: var(--color-cover);
     @include flex-box-set(center, center);
     margin-left: 85%;
     &_des {
@@ -58,7 +74,7 @@ import { ref, reactive } from "vue";
     @include pCenter(-50%, -58%);
     height: 28rem;
     width: 4rem;
-    border: 2px $color-letter solid;
+    border: 2px var(--color-cover) solid;
     font-size: 2.1rem;
     padding: 1.3rem 4px;
     flex-direction: column;
@@ -80,7 +96,7 @@ import { ref, reactive } from "vue";
     @include wh(25rem, 5rem);
     margin: 28rem auto 0;
     font-size: 2.2rem;
-    color: $color-letter;
+    color: var(--color-cover);
     @include flex-box-set(center, center);
   }
 }

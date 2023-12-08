@@ -75,16 +75,21 @@ const handleup = () => {
   }
 };
 
-const handleDown = (e) => {
+const handleDown = (event) => {
+  // console.log(e);
   if (counts.value == 1) return;
-  startX = e.x;
+  startX = event.touches[0].clientX;
+  console.log("起始距离" + startX);
 };
 
 const handleMove = (event) => {
   if (counts.value == 1) return;
-  let moveX = event.x;
+  console.log(event);
+  let moveX = event.touches[0].clientX;
   distance = startX - moveX;
+  console.log("移动距离" + moveX);
   console.log(distance);
+  // console.log(distance);
   //在第一页不能左移 第二页不能右移
   if (
     (curCts.value == 1 && distance < 0) ||
@@ -95,23 +100,41 @@ const handleMove = (event) => {
 
   letterwindow.value.style.transform = `translateX(calc(-${moveVw}vw - ${distance}px))`;
 };
+
+const imgUrl = ref("images/paper/rose-01.jpg");
+
+const senddata2 = () => {
+  ListStroe.SETBGURL(imgUrl.value);
+};
 </script>
 
 <template>
   <div
     class="priview"
-    @pointerdown="handleDown"
-    @pointermove="handleMove"
-    @pointerup="handleup"
+    @touchstart="handleDown"
+    @touchmove="handleMove"
+    @touchend="handleup"
   >
-    <nav-head class="priview_nav">
+    <nav-head class="priview_nav" :nRoute="'send'">
       <template #navtitle>
         <span @click="print">信件预览</span>
       </template>
-    </nav-head>
 
+      <template #navright>
+        <img
+          src="@/assets/images/lettercover.png"
+          @click="senddata2"
+          class="img"
+          alt=""
+        />
+      </template>
+    </nav-head>
+    {{ imgUrl }}
     <div ref="letterwindow">
-      <letter-page :letter-content="replacedArray"></letter-page>
+      <letter-page
+        :letter-content="replacedArray"
+        :image-url="imgUrl"
+      ></letter-page>
     </div>
 
     <!-- 弹出层 -->
@@ -120,7 +143,7 @@ const handleMove = (event) => {
       <span class="priview_popup_count">{{ curCts }}/{{ counts }}</span>
     </div>
 
-    <popup-box v-model:isShow="show"></popup-box>
+    <popup-box v-model:isShow="show" v-model:bgUrl="imgUrl"></popup-box>
   </div>
 </template>
 
@@ -167,6 +190,9 @@ const handleMove = (event) => {
       flex: 6;
       font-size: 1.5rem;
       @include flex-box-set(center, center);
+    }
+    .img {
+      width: 50%;
     }
   }
 

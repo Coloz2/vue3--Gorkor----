@@ -26,7 +26,9 @@ const goNext = () => {
       <img src="@/assets/images/arror.png" alt="" class="img" />
     </div>
 
-    <slot name="navtitle"></slot>
+    <div class="navhead_mid">
+      <span><slot name="navtitle"></slot></span>
+    </div>
 
     <div class="navhead_right" @click="goNext">
       <slot name="navright"></slot>
@@ -36,6 +38,13 @@ const goNext = () => {
 
 <style lang="scss" scoped>
 .navhead {
+  &_mid {
+    flex: 6;
+    span {
+      font-size: 1.5rem;
+      @include flex-box-set(center, center);
+    }
+  }
   height: 5rem;
   @include flex-box();
   background-color: rgb(255, 255, 255);

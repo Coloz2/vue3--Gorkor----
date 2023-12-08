@@ -1,16 +1,55 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, resolveDirective } from "vue";
+import { loginAPI } from "@/api/login.js";
+import { useUserStore } from "@/stores/user.js";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const userStore = useUserStore();
+const user = ref("蟒蟒2");
+const pass = ref(null);
+const input2 = ref(null);
+const label = ref("账号密码");
+const submitLogin = async () => {
+  const username = user.value;
+  const password = pass.value;
+  try {
+    const res = await loginAPI({ username, password });
+    console.log(res);
+    //把token存入本地
+    window.localStorage.setItem("jwtToken", res.data.token);
+    //跳转
+    router.replace({ path: "/" });
+    //把用户数据存入pinia
+    userStore.SETUSER(res.data.data);
+  } catch (err) {
+    console.log("444");
+    label.value.innerText = err.message;
+    label.value.style.color = "red";
+    input2.value.classList.add("error");
+  }
+};
+
+const sixsix = () => {
+  input2.value.classList.remove("error");
+  label.value.innerText = "账号密码";
+  label.value.style.color = "#693154";
+};
+
+const print = () => {
+  console.log("ggg");
+};
 </script>
 
 <template>
   <div class="login">
-    <div class="login_logo">
+    <div class="login_logo" @click="submitLogin">
       <img src="@/assets/images/pen2.png" alt="" class="img" />
     </div>
-
+    {{ pass }}
     <div class="login_group">
       <div class="login_group_one">
         <input
+          v-model="user"
           type="text"
           class="login__input"
           placeholder="账号名称"
@@ -22,23 +61,29 @@ import { ref, reactive } from "vue";
 
       <div class="login_group_one">
         <input
-          type="email"
+          ref="input2"
+          v-model="pass"
+          type="text"
           class="login__input"
           placeholder="账号密码"
           id="email"
+          @input="sixsix"
           required
         />
-        <label for="email" class="login__label">账号密码</label>
+        <label for="email" class="login__label" ref="label">账号密码</label>
       </div>
     </div>
 
-    <div class="login_button">
+    <div class="login_button" @click="submitLogin">
       <div class="login_button_title">登录</div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.error {
+  border-bottom: 3px solid rgb(231, 4, 0) !important;
+}
 .login {
   &_logo {
     @include wh(15rem, 15rem);
@@ -78,7 +123,7 @@ import { ref, reactive } from "vue";
     }
 
     &:focus:invalid {
-      border-bottom: 3px solid rgb(234, 134, 63);
+      border-bottom: 3px solid rgb(254, 1, 1);
     }
     //占位符 预输入文字的颜色
     &::-webkit-input-placeholder {
@@ -103,6 +148,7 @@ import { ref, reactive } from "vue";
   }
 
   &_button {
+    z-index: 3;
     @include wh(65%, 5rem);
     margin: 0 auto;
     background-color: $click-color;

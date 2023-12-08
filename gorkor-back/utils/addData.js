@@ -2,6 +2,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import { dirname } from "path";
 import { frontNav } from "../models/rebirth.js";
+import { writingBg } from "../models/rebirth.js";
 import path from "path";
 
 // 获取当前模块的文件路径
@@ -38,3 +39,11 @@ imageFiles.forEach(async (filename) => {
     // 这里可以处理错误情况
   }
 });
+
+// const group = filename.split("-")[0];
+// const createdRecord = await writingBg.create({
+//   imageUrl: imgPath,
+//   group,
+//   name: filename.replace(/\.png$|\.jpg$/, ""),
+//   price: 100,
+// });

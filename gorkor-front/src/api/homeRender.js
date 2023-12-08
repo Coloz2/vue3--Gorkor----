@@ -1,6 +1,9 @@
 import request from "@/utils/http.js";
 
-const getFeature = async () => {
+export const getFeature = async () => {
   return request.get("/api/frontRender/sb");
 };
-export { getFeature };
+
+export const getPapperBg = async () => {
+  return request.get("/api/bg/papper");
+};

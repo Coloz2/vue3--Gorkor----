@@ -1,106 +1,115 @@
 <script setup>
-import { ref, reactive } from "vue";
-import { Swiper, SwiperSlide } from "swiper/vue";
-// Import Swiper styles
-import "swiper/scss";
-import "swiper/scss/effect-coverflow";
-import "swiper/scss/pagination";
+import { ref, reactive, vModelCheckbox } from "vue";
+const color = ref("#69a4ed");
 
-// import required modules
-import { EffectCoverflow, Pagination } from "swiper/modules";
-const modules = ref([EffectCoverflow, Pagination]);
+const props = defineProps({
+  bgUrl: String,
+});
 </script>
 
 <template>
-  <div class="sbox">
+  <div class="sendBox">
     <nav-head class="sbox_head">
       <template #navtitle>
         <span>信件预览</span>
       </template>
     </nav-head>
-
-    <div class="sbox_body">
-      <swiper
-        :effect="'coverflow'"
-        :grabCursor="true"
-        :centeredSlides="true"
-        :slidesPerView="'auto'"
-        :coverflowEffect="{
-          rotate: 50,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
-        }"
-        :modules="modules"
-        class="mySwiper"
-      >
-        <swiper-slide>
-          <letter-cover></letter-cover>
-        </swiper-slide>
-        <swiper-slide>
-          <letter-cover></letter-cover>
-        </swiper-slide>
-        <swiper-slide>
-          <letter-cover></letter-cover>
-        </swiper-slide>
-        <swiper-slide>
-          <letter-cover></letter-cover>
-        </swiper-slide>
-      </swiper>
+    <div class="sendBox_cover">
+      <letter-cover :gcolor="color"></letter-cover>
+    </div>
+    <div class="sendBox_body">
+      <div class="sendBox_body_bottom">
+        <div class="sendBox_body_bottom_top">
+          <span>对方将及时收到你的信件</span>
+        </div>
+        <div class="sendBox_body_bottom_down">
+          <div class="left">
+            <div class="left_center">
+              <input type="checkbox" />发送同时保存草稿箱
+            </div>
+          </div>
+          <div class="right">
+            <div class="right_center">发送</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.swiper {
-  width: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.swiper-slide {
-  background-position: center;
-  background-size: cover;
-  width: 30rem;
-  height: 50rem;
-  ::v-deep .swiper-slide-shadow-left {
-    background-image: none;
-  }
-  ::v-deep .swiper-slide-shadow-right {
-    background-image: none;
-  }
-
-  // ::v-deep
-  //   .swiper-slide.swiper-slide-visible.swiper-slide-prev {
-  //   transform: translate3d(22px, 0px, 0px) scale(0.9);
-  // }
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.sbox {
-  &_head {
-    img {
-      @include wh(60%, 60%);
-      margin: 0 auto;
-    }
-    span {
-      flex: 6;
-      font-size: 1.5rem;
-      @include flex-box-set(center, center);
-    }
-  }
-
+.sendBox {
   &_body {
-    background-color: $color-bg;
-    width: 100%;
-    height: calc(100vh - 5rem);
+    @include wh(100vw, calc(100vh - 5rem));
     transform: translateY(5rem);
+    background-color: rgb(235, 234, 234);
+
+    &_bottom {
+      position: absolute;
+      bottom: 0;
+      width: 100vw;
+      height: 12rem;
+      &_top {
+        color: white;
+        height: 3.5rem;
+        font-size: 1.8rem;
+        background-color: grey;
+        @include flex-box-set(center, center);
+      }
+
+      &_down {
+        display: flex;
+        font-size: 1.6rem;
+        height: calc(100% - 3.5rem);
+        .left {
+          @include flex-box-set(center, center);
+          &_center {
+            @include flex-box-set(center, center);
+
+            input {
+              @include wh(25px, 25px);
+              margin-right: 1rem;
+            }
+
+            input::before {
+              content: "";
+              position: fixed;
+              width: 16px;
+              height: 16px;
+              background: rgb(96, 228, 255);
+              margin-right: 8px;
+              z-index: 30;
+            }
+            // input:checked::after {
+            //   content: "✓";
+            //   color: #fff;
+            //   font-size: 15px;
+            //   line-height: 25px;
+            //   background-color: rgb(19, 179, 207);
+            // }
+          }
+
+          flex: 3;
+          background-color: rgb(255, 255, 255);
+        }
+
+        .right {
+          font-size: 2.3rem;
+          background-color: $click-color;
+          flex: 2;
+          color: white;
+          @include flex-box-set(center, center);
+        }
+      }
+    }
+  }
+
+  &_cover {
+    position: absolute;
+    z-index: 1;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 </style>
