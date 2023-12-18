@@ -18,16 +18,41 @@
 // const selectedUser = weightedRandomChoice(users, weights);
 // console.log("Selected user:", selectedUser);
 // 获取数据库中存储的 creDate 和 curDate
-const creDate = new Date("2023-02-06T02:40:40Z");
-const curDate = new Date("2023-12-07T02:40:40Z");
 
-// 创建三天前的日期对象
-const threeDaysAgo = new Date(curDate);
-threeDaysAgo.setDate(curDate.getDate() - 3);
+// 假设你有一个用户数组
+// const users = [
+//   { id: 1, weight: 3 },
+//   { id: 2, weight: 1 },
+//   { id: 3, weight: 5 },
+//   // ... 其他用户
+// ];
 
-// 比较 creDate 是否在三天前之前
-if (creDate < threeDaysAgo) {
-  console.log("creDate 在三天前之前");
-} else {
-  console.log("creDate 不在三天前之前");
-}
+// // 步骤1：计算总权重 9
+// const totalWeight = users.reduce((sum, user) => sum + user.weight, 0);
+
+// // console.log(totalWeight);
+// // 步骤2：生成随机数
+// const randomValue = Math.random() * totalWeight;
+// console.log(randomValue);
+// // 步骤3：遍历用户并判断
+// let cumulativeWeight = 0;
+// let selectedUser;
+
+// for (const user of users) {
+//   cumulativeWeight += user.weight;
+//   if (randomValue <= cumulativeWeight) {
+//     selectedUser = user;
+//     break;
+//   }
+// }
+
+// console.log("选择的用户:", selectedUser);
+
+[
+  {
+    senderId: "c6caee27",
+  },
+  {
+    senderId: "fbcfb671",
+  },
+];

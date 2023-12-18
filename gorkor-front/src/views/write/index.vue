@@ -1,21 +1,59 @@
 <script setup>
-import { ref, watchEffect, nextTick, getTransitionRawChildren } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import NavHead from "@/components/navHead.vue";
 import { useletterStore } from "@/stores/letterData.js";
-
+import { codDrafts } from "@/api/draftsAPI";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 const textarea1 = ref("");
 const ListStroe = useletterStore();
+const type = ref("random");
 const myTextarea = ref(null); // 创建 ref
+//首次打开从数据库请求数据 后面从Pinia请求
+// const lControl = ref(false);
+//创造或者更新
+function save(value, id) {
+  const item = ListStroe.letterObj.find((item) => item.receiverId == id);
+  console.log(item);
+  console.log("-------");
+  if (item) {
+    console.log("abcdefg");
+    ListStroe.SETCONTENT_FRONT(value, id);
+  } else {
+    console.log("b");
+    ListStroe.createLetter(value, id);
+  }
+}
+
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const sendData = () => {
-  // const letterList = textarea1.value.split(/\r?\n|\r/);
-
-  // const hero = document.querySelector(".hero");
-  // console.log(hero.offsetWidth);
-  // console.log(hero.getBoundingClientRect());
+  router.push({ name: "priView", params: { id: 0 } });
   console.log(textarea1.value);
-  ListStroe.createLetter(textarea1.value);
+  save(textarea1.value, 0);
 };
+
+onMounted(async () => {
+  // 注册全局事件 关闭保存
+  window.onbeforeunload = async function () {
+    save(textarea1.value, 0);
+    //引入pinia中所有的letterObj数据
+    const allLetter = ListStroe.GETALL();
+    console.log(allLetter);
+    const res = await codDrafts(allLetter);
+    console.log(res);
+  };
+  //获取pinia中的数据 赋值给文本框
+  const letter = await import(/* @vite-ignore */ "@/stores/letterData.js");
+  const letterStore = letter.useletterStore();
+  textarea1.value = letterStore.GETCONTENT(0);
+});
+
+onBeforeUnmount(() => {
+  //在当前页面关闭时保存数据
+  save(textarea1.value, 0);
+});
 
 // const checkOverflow = () => {
 //   // 通过 .value 访问引用的元素
@@ -32,7 +70,7 @@ const sendData = () => {
 
 <template>
   <div class="letter">
-    <nav-head class="letter_nav" :nRoute="'preView'">
+    <nav-head class="letter_nav">
       <template #navtitle>
         <span>给TA写信</span>
       </template>

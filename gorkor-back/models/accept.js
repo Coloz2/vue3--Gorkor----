@@ -2,7 +2,11 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 const acceptSchema = async () => {
-  class acceptModel extends Model {}
+  class acceptModel extends Model {
+    print() {
+      console.log("gg");
+    }
+  }
   acceptModel.init(
     {
       senderId: {
@@ -18,18 +22,10 @@ const acceptSchema = async () => {
         allowNull: false,
       },
       content: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
         allowNull: false,
       },
-      recipientId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      leType: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      count: {
+      receiverId: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -38,10 +34,15 @@ const acceptSchema = async () => {
         allowNull: false,
         defaultValue: false,
       },
+      sendLoginAt: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     },
     {
       sequelize,
       modelName: "accept",
+      timestamps: false,
       // 其他模型配置，例如表名和时间戳字段
     }
   );

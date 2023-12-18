@@ -1,7 +1,10 @@
 import axios from "axios";
-
 const httpInstance = axios.create({
   baseURL: "http://localhost:3000",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // 添加请求拦截器
@@ -11,7 +14,7 @@ httpInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log(config);
+
     return config;
   },
   function (error) {
@@ -31,7 +34,7 @@ httpInstance.interceptors.response.use(
     //   type: "warning",
     //   message: e.response.data.message,
     // });
-    return Promise.reject(e.response.data);
+    return Promise.reject(e);
   }
 );
 

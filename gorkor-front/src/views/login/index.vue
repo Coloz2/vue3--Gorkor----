@@ -5,8 +5,8 @@ import { useUserStore } from "@/stores/user.js";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const userStore = useUserStore();
-const user = ref("蟒蟒2");
-const pass = ref(null);
+const user = ref("快乐的猪2");
+const pass = ref(12345);
 const input2 = ref(null);
 const label = ref("账号密码");
 const submitLogin = async () => {
@@ -16,7 +16,7 @@ const submitLogin = async () => {
     const res = await loginAPI({ username, password });
     console.log(res);
     //把token存入本地
-    window.localStorage.setItem("jwtToken", res.data.token);
+    window.localStorage.setItem("jwtToken", res.data.data.token);
     //跳转
     router.replace({ path: "/" });
     //把用户数据存入pinia

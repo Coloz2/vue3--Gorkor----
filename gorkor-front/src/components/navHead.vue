@@ -11,13 +11,12 @@ const props = defineProps({
 const nextRoute = ref(props.nRoute);
 
 const goback = () => {
-  console.log("!1111");
   router.back();
 };
 
-const goNext = () => {
-  router.push(`/${nextRoute.value}`);
-};
+// const goNext = () => {
+//   router.push(`/${nextRoute.value}`);
+// };
 </script>
 
 <template>
@@ -38,10 +37,10 @@ const goNext = () => {
 
 <style lang="scss" scoped>
 .navhead {
+  font-size: 2rem;
   &_mid {
     flex: 6;
     span {
-      font-size: 1.5rem;
       @include flex-box-set(center, center);
     }
   }

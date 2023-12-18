@@ -1,10 +1,24 @@
 <script setup>
-import { ref, reactive, vModelCheckbox } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 const color = ref("#69a4ed");
 
 const props = defineProps({
   bgUrl: String,
 });
+
+//页面关闭时清空send
+import { useSendStore } from "@/stores/send";
+const sendStore = useSendStore();
+onBeforeUnmount(() => {
+  sendStore.CLEARSEND();
+});
+
+import { sendLetter } from "@/api/sendAPI";
+const send = async () => {
+  const ctx = sendStore.GETSENDOBJ();
+  const res = await sendLetter(ctx[0]);
+  console.log(res);
+};
 </script>
 
 <template>
@@ -28,7 +42,7 @@ const props = defineProps({
               <input type="checkbox" />发送同时保存草稿箱
             </div>
           </div>
-          <div class="right">
+          <div class="right" @click="send">
             <div class="right_center">发送</div>
           </div>
         </div>

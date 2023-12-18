@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 // Import Swiper styles
 import "swiper/scss";
@@ -9,6 +9,18 @@ import "swiper/scss/pagination";
 // import required modules
 import { EffectCoverflow, Pagination } from "swiper/modules";
 const modules = ref([EffectCoverflow, Pagination]);
+
+//信件主题色
+// const color = ref("#693154");
+const color = "#693154";
+
+onMounted(async () => {
+  //1.获取userId
+  const user = await import(/* @vite-ignore */ "@/stores/user.js");
+  const { id } = user.GETUSERINFO();
+  //2.获取信件列表
+  //3.渲染信件列表
+});
 </script>
 
 <template>
@@ -36,16 +48,13 @@ const modules = ref([EffectCoverflow, Pagination]);
         class="mySwiper"
       >
         <swiper-slide>
-          <letter-cover></letter-cover>
+          <letter-cover :gcolor="color"></letter-cover>
         </swiper-slide>
         <swiper-slide>
-          <letter-cover></letter-cover>
+          <letter-cover :gcolor="color"></letter-cover>
         </swiper-slide>
         <swiper-slide>
-          <letter-cover></letter-cover>
-        </swiper-slide>
-        <swiper-slide>
-          <letter-cover></letter-cover>
+          <letter-cover :gcolor="color"></letter-cover>
         </swiper-slide>
       </swiper>
     </div>

@@ -8,8 +8,13 @@ export const useUserStore = defineStore("user", () => {
     userInfo.value = user;
   };
 
+  function GETUSERINFO() {
+    return userInfo.value;
+  }
+
   return {
     userInfo,
     SETUSER,
+    GETUSERINFO,
   };
 });

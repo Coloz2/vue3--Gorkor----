@@ -15,25 +15,26 @@ const __dirname = dirname(__filename);
 const parentDir = path.resolve(__dirname, "..");
 
 //读取images图片文件夹
-const imagesDir = path.join(parentDir, "images", "methods");
+const imagesDir = path.join(parentDir, "images", "paper");
 
 const imageFiles = fs.readdirSync(imagesDir);
 
 //将路径复制
 imageFiles.forEach(async (filename) => {
-  const imgPath = path.join("images", "methods", filename);
+  const imgPath = path.join("images", "paper", filename);
   // 插入NavFront表;
-  const existingRecord = await frontNav.findOne({
+  const existingRecord = await writingBg.findOne({
     where: { imageUrl: imgPath },
   });
 
   try {
-    const createdRecord = await frontNav.create({
+    const group = filename.split("-")[0];
+    const createdRecord = await writingBg.create({
       imageUrl: imgPath,
-      title: filename.replace(/\.png$/, ""),
+      group,
+      name: filename.replace(/\.png$|\.jpg$/, ""),
+      price: 100,
     });
-    console.log("Record created successfully:", createdRecord);
-    // 这里可以进行后续操作
   } catch (error) {
     console.error("Error creating record:", error);
     // 这里可以处理错误情况
@@ -47,3 +48,10 @@ imageFiles.forEach(async (filename) => {
 //   name: filename.replace(/\.png$|\.jpg$/, ""),
 //   price: 100,
 // });
+
+// const createdRecord = await frontNav.create({
+//   imageUrl: imgPath,
+//   title: filename.replace(/\.png$/, ""),
+// });
+// console.log("Record created successfully:", createdRecord);
+// 这里可以进行后续操作

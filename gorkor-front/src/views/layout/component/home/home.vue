@@ -1,18 +1,41 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import navButton from "./component/navButton.vue";
 import { getFeature } from "/gorkor/gorkor-front/src/api/homeRender.js";
+import { getDraftsList } from "@/api/draftsAPI.js";
+import App from "@/App.vue";
+// import { useUserStore } from "@/stores/user";
+// import { useletterStore } from "@/stores/letterData";
 
 //RENDER APIT
 const featureList = ref([]);
 const route = useRouter();
-
+const isFind = ref(false);
 const getbanner = async () => {
   const { data } = await getFeature();
   featureList.value = data.navSource;
   console.log(featureList.value);
 };
+
+const imgurl = ref(null);
+function textUrl() {
+  const path = new URL("../../../../assets/images/home.png", import.meta.url);
+  console.log(path);
+  imgurl.value = path.pathname;
+}
+
+onMounted(async () => {
+  //pinia获取数据 备用
+  const user = await import(/* @vite-ignore */ "@/stores/letterData.js");
+  const letterStore = letter.useletterStore();
+  await letterStore.SETOBJ_BACK();
+
+  textUrl();
+});
+// import("../../../../assets/images/home.png").then((res) => {
+//   imageUrl.value = res.default;
+// });
 
 const junmpL = () => {
   route.push("/island");
@@ -30,7 +53,7 @@ onMounted(() => getbanner());
       <router-link to="/write">
         <navButton bgcColor="#ce9294">
           <template #bphoto>
-            <img src="@/assets/images/home.png" class="bphoto" alt="" />
+            <img :src="imgurl" class="bphoto" alt="" />
           </template>
           <template #title>
             <span class="home_nav_title">写信</span>
@@ -47,14 +70,16 @@ onMounted(() => getbanner());
         </template>
       </navButton>
 
-      <navButton bgcColor="#79aea6">
-        <template #bphoto>
-          <img src="@/assets/images/home.png" class="bphoto" alt="" />
-        </template>
-        <template #title>
-          <span class="home_nav_title">信箱</span>
-        </template>
-      </navButton>
+      <router-link to="/mailbox">
+        <navButton bgcColor="#79aea6">
+          <template #bphoto>
+            <img src="@/assets/images/home.png" class="bphoto" alt="" />
+          </template>
+          <template #title>
+            <span class="home_nav_title">信箱</span>
+          </template>
+        </navButton>
+      </router-link>
 
       <navButton bgcColor="#a39de3">
         <template #bphoto>

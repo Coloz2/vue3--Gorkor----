@@ -31,7 +31,7 @@ const print = () => {
   //计算下划线 每页19条
   loopLine.value = count.value * 18;
   console.log("页数---" + count.value);
-  ListStroe.INCREMENT_COUNT(`${count.value}`);
+  // ListStroe.INCREMENT_COUNT(`${count.value}`, "random");
   console.log(cWidth);
   // 根据页数分隔
   box.style.columnCount = count.value;
@@ -51,12 +51,15 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["set"]);
+
 // const imageUrl = `http://localhost:3000/images/paper/rose-01.jpg`;
 onMounted(() => {
   bg.value.style.background = `url(http://localhost:3000/images/paper/rose-01.jpg) repeat-x`;
   //在页面渲染完成后计算
   nextTick(() => {
     print();
+    emit("set", count.value);
   });
 });
 

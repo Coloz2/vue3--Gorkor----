@@ -87,6 +87,12 @@ const userSchema = async () => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      //接收信件的数量
+      letterCount: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 0,
+      },
       //虚拟字段 确认密码
       confirmPassword: {
         type: DataTypes.VIRTUAL,

@@ -34,10 +34,11 @@ const routes = [
     meta: { needLogin: true },
   },
   {
-    path: "/preView",
+    path: "/preView/:id",
     name: "priView",
     component: () => import("@/views/preView/index.vue"),
     meta: { needLogin: true },
+    props: (route) => ({ id: route.params.id }),
   },
   {
     path: "/send",
@@ -54,7 +55,11 @@ const routes = [
     path: "/test",
     component: () => import("@/views/text.vue"),
   },
-  { path: "/mailbox", component: () => import("@/views/mailbox/mailbox.vue") },
+  {
+    path: "/mailbox",
+    name: "mailbox",
+    component: () => import("@/views/mailbox/mailbox.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -63,16 +68,16 @@ const router = createRouter({
 });
 
 //判断是否登录
-// import { useUserStore } from "@/stores/user.js";
+import { useUserStore } from "@/stores/user.js";
 
-// router.beforeEach((to, from) => {
-//   const userStore = useUserStore();
-//   if (!userStore.userInfo.token && to.meta.needLogin) {
-//     return { name: "login" };
-//   }
-//   //嵌套路由时 to包含多个路劲 此时需要matched
-//   // to.matched.some((item) => console.log(item))
-//   //
-// });
+router.beforeEach((to, from) => {
+  const userStore = useUserStore();
+  if (!userStore.userInfo.token && to.meta.needLogin) {
+    return { name: "login" };
+  }
+  //嵌套路由时 to包含多个路劲 此时需要matched
+  // to.matched.some((item) => console.log(item))
+  //
+});
 
 export default router;
