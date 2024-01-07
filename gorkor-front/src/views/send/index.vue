@@ -3,12 +3,14 @@ import { ref, onBeforeUnmount } from "vue";
 const color = ref("#69a4ed");
 
 const props = defineProps({
+  id: String,
   bgUrl: String,
 });
 
 //页面关闭时清空send
 import { useSendStore } from "@/stores/send";
 const sendStore = useSendStore();
+
 onBeforeUnmount(() => {
   sendStore.CLEARSEND();
 });
@@ -19,6 +21,14 @@ const send = async () => {
   const res = await sendLetter(ctx[0]);
   console.log(res);
 };
+
+const rdctx = ref({
+  id: 0,
+  pNumber: null,
+  sendword: "痛苦的思想者",
+  sendLoginAt: "000",
+  useranme: null,
+});
 </script>
 
 <template>
@@ -29,7 +39,7 @@ const send = async () => {
       </template>
     </nav-head>
     <div class="sendBox_cover">
-      <letter-cover :gcolor="color"></letter-cover>
+      <letter-cover :gcolor="color" :content="rdctx"></letter-cover>
     </div>
     <div class="sendBox_body">
       <div class="sendBox_body_bottom">

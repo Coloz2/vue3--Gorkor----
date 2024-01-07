@@ -1,7 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, watch, nextTick, watchEffect } from "vue";
-
-import { useletterStore } from "@/stores/letterData.js";
+import { ref, onMounted, watch, watchEffect } from "vue";
 
 const divBox = ref(null);
 const divContent = ref(null);
@@ -13,19 +11,16 @@ const bg = ref(null);
 //背景图片样式
 const bgsize = ref({});
 //
-const ListStroe = useletterStore();
-//
 const print = () => {
   const content = divContent.value;
   const box = divBox.value;
-  const line = divLine.value;
   //文本高度
   const cHeight = content.clientHeight;
   const cWidth = content.clientWidth;
   const boxHeight = box.clientHeight;
-  // console.log("文本高度-----" + cHeight);
-  // console.log("当前页高度----" + boxHeight);
-  // console.log("当前宽度---" + cWidth);
+  console.log("文本高度-----" + cHeight);
+  console.log("当前页高度----" + boxHeight);
+  console.log("当前宽度---" + cWidth);
   //计算页数px
   count.value = Math.ceil(cHeight / boxHeight);
   //计算下划线 每页19条
@@ -34,7 +29,8 @@ const print = () => {
   // ListStroe.INCREMENT_COUNT(`${count.value}`, "random");
   console.log(cWidth);
   // 根据页数分隔
-  box.style.columnCount = count.value;
+  // box.style.columnCount = count.value;
+  // console.log("分隔----" + box.style.columnCount);
   // 每隔宽度
   box.style.columnWidth = `${cWidth}px`;
   //背景图片样式
@@ -54,20 +50,64 @@ const props = defineProps({
 const emit = defineEmits(["set"]);
 
 // const imageUrl = `http://localhost:3000/images/paper/rose-01.jpg`;
+// onMounted(() => {
+//   //在页面渲染完成后计算
+//   // const imG = ref(props.imageUrl);
+//   // console.log("-1");
+//   // console.log(imG.value);
+//   // // 在这里更新背景样式或执行其他操作
+//   // bg.value.style.background = `url(http://localhost:3000/${imG.value}) repeat-x`;
+//   // emit("set", count.value);
+//   console.log(divContent.value);
+// });
+let sizeChange = 0;
+const divHeight = ref(0);
 onMounted(() => {
-  bg.value.style.background = `url(http://localhost:3000/images/paper/rose-01.jpg) repeat-x`;
-  //在页面渲染完成后计算
-  nextTick(() => {
-    print();
-    emit("set", count.value);
+  console.log("3");
+  //默认背景
+  bg.value.style.background = `url(http://localhost:3000/images/paper/rose-02.jpg) repeat-x`;
+
+  //监听size事件
+  const resizeObserver = new ResizeObserver((entries) => {
+    sizeChange++;
+    //渲染两次后  得到初始高度 关闭监听
+    for (let entry of entries) {
+      console.log(entry);
+      divHeight.value = entry.target.clientHeight;
+      if (sizeChange == 2) {
+        resizeObserver.disconnect();
+      }
+    }
+  });
+
+  //监听<p>
+  watchEffect(() => {
+    if (divContent.value) {
+      resizeObserver.observe(divContent.value);
+    }
   });
 });
 
+//监听背景图片
 watch(
   () => props.imageUrl,
   (newImageUrl) => {
     const normalizedImageUrl = newImageUrl.replace(/\\/g, "/");
     bg.value.style.background = `url(http://localhost:3000/${normalizedImageUrl}) repeat-x`;
+  }
+);
+
+//监听P元素高度
+const stopWatchingHeight = watch(
+  () => divHeight.value,
+  (newCheight) => {
+    if (newCheight) {
+      print();
+      //发送事件
+      emit("set", count.value);
+      // 停止监听 divHeight.value
+      stopWatchingHeight();
+    }
   }
 );
 </script>
@@ -91,7 +131,6 @@ watch(
     </div>
   </div>
 </template>
-
 <style lang="scss" scoped>
 .priview_body {
   height: calc(100vh - 5rem);

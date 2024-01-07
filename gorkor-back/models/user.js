@@ -1,4 +1,5 @@
 import { DataTypes, Model } from "sequelize";
+
 import sequelize from "../config/database.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -38,8 +39,9 @@ const userSchema = async () => {
     //计算权重
     static calculateWeight(options) {
       const { hasUnread = false, count = 0 } = options;
+      console.log("--------------------------------------");
+      console.log("--------------------------------------");
       console.log("READ---------------" + hasUnread);
-      console.log("COUNT---------------" + count);
       // 如果有未查看信件、没有登录、邮箱邮件数为5，总权重为0
       if (hasUnread || count === 5) return 0;
       //新用户权重最大
@@ -88,8 +90,8 @@ const userSchema = async () => {
         allowNull: false,
       },
       //接收信件的数量
-      letterCount: {
-        type: DataTypes.STRING,
+      passerCount: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },

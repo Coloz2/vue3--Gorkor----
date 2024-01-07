@@ -26,6 +26,9 @@ dependencies:
   mysql2:
     specifier: ^3.6.4
     version: registry.npmmirror.com/mysql2@3.6.5
+  node-cron:
+    specifier: ^3.0.3
+    version: registry.npmmirror.com/node-cron@3.0.3
   sequelize:
     specifier: ^6.35.1
     version: registry.npmmirror.com/sequelize@6.35.1(mysql2@3.6.5)
@@ -1051,6 +1054,15 @@ packages:
     resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==, tarball: https://registry.npmmirror.com/node-addon-api/-/node-addon-api-5.1.0.tgz}
     name: node-addon-api
     version: 5.1.0
+    dev: false
+
+  registry.npmmirror.com/node-cron@3.0.3:
+    resolution: {integrity: sha512-dOal67//nohNgYWb+nWmg5dkFdIwDm8EpeGYMekPMrngV3637lqnX0lbUcCtgibHTz6SEz7DAIjKvKDFYCnO1A==, tarball: https://registry.npmmirror.com/node-cron/-/node-cron-3.0.3.tgz}
+    name: node-cron
+    version: 3.0.3
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      uuid: registry.npmmirror.com/uuid@8.3.2
     dev: false
 
   registry.npmmirror.com/node-fetch@2.7.0:

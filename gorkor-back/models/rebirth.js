@@ -11,6 +11,16 @@ const writingBg = await writingPaperModel();
 const acceptLetter = await acceptSchema();
 const drafts = await draftsSchema();
 
+function sbb() {
+  const acceptF = sequelize.models.accept;
+  const passerF = sequelize.models.userModel;
+  //关联表
+  acceptF.belongsTo(passerF, { foreignKey: "id" });
+  passerF.hasMany(acceptF, { foreignKey: "senderId" });
+}
+
+sbb();
+
 await sequelize.sync({ after: true });
 
 // await userSchema.addColumn("silence", {

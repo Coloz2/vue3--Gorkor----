@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 
 //点击和被点击的图片路径
 const getImagePath = (imageName) => `/src/assets/images/${imageName}`;
@@ -51,21 +51,20 @@ const pageChange = (index) => {
           </div>
         </router-link>
       </nav>
+
+      <router-view></router-view>
     </div>
-    <router-view></router-view>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .box {
-  width: 100%;
-  height: 100%;
   background-color: $brigecolor;
 
   &_nav {
     height: 5rem;
     z-index: 100;
-    position: absolute;
+    position: fixed;
     width: 100%;
     bottom: 0;
     background-color: #fff;

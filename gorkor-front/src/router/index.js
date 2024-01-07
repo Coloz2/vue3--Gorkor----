@@ -29,9 +29,11 @@ const routes = [
     ],
   },
   {
-    path: "/write",
+    path: "/write/:id",
+    name: "write",
     component: () => import("@/views/write/index.vue"),
     meta: { needLogin: true },
+    props: (route) => ({ id: route.params.id }),
   },
   {
     path: "/preView/:id",
@@ -41,10 +43,11 @@ const routes = [
     props: (route) => ({ id: route.params.id }),
   },
   {
-    path: "/send",
+    path: "/send/:id",
     name: "send",
     component: () => import("@/views/send/index.vue"),
     meta: { needLogin: true },
+    props: (route) => ({ id: route.params.id }),
   },
   {
     path: "/login",
@@ -59,6 +62,36 @@ const routes = [
     path: "/mailbox",
     name: "mailbox",
     component: () => import("@/views/mailbox/mailbox.vue"),
+    meta: { needLogin: true },
+  },
+  {
+    path: "/read/:id/:time",
+    name: "read",
+    component: () => import("@/components/readLetter.vue"),
+    props: (route) => ({ id: route.params.id, time: route.params.time }),
+  },
+  {
+    path: "/shop/stamp",
+    name: "shop",
+    component: () => import("@/views/shop/index.vue"),
+    children: [
+      {
+        path: "",
+        name: "stamp",
+        component: () => import("@/views/shop/component/stampShop.vue"),
+      },
+      {
+        path: "/shop/letter",
+        name: "letterShop",
+        component: () => import("@/views/shop/component/letterShop.vue"),
+      },
+    ],
+  },
+  {
+    path: "/skeleton/:cid/:sid",
+    name: "skeleton",
+    component: () => import("@/views/skeleton/index.vue"),
+    props: (route) => ({ cid: route.params.cid, sid: route.params.sid }),
   },
 ];
 

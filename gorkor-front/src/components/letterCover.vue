@@ -5,22 +5,37 @@ const props = defineProps({
   gcolor: {
     type: String,
   },
+  content: {
+    type: Object,
+  },
 });
 
+const pNumber = ref(props.content.pNumber);
+const sendword = ref(props.content.sendword);
+const id = ref(props.content.id);
+const time = ref(props.content.sendLoginAt);
 onMounted(() => {
   //定义颜色
   document.documentElement.style.setProperty("--color-cover", props.gcolor);
+  console.log(pNumber, sendword);
 });
-// Import Swiper Vue.js components
+
+import { useRouter } from "vue-router";
+const router = useRouter();
+function toRead() {
+  if (id.value == 0) return;
+  router.push({ name: "read", params: { id: id.value, time: time.value } });
+}
 </script>
 
 <template>
-  <div class="box">
+  <div class="box" @click="toRead">
     <div class="box_type">
       <div class="box_type_des">新人信件</div>
     </div>
     <div class="box_title">
-      <div class="box_title_des">过客 · 一一六</div>
+      <div class="box_title_des" v-if="id !== 0">过客 · {{ pNumber }}</div>
+      <div class="box_title_des" v-else>陌生过客</div>
       <div class="box_title_pen">
         <img src="@/assets/images/pen.png" class="img" alt="" />
       </div>
@@ -31,7 +46,7 @@ onMounted(() => {
     </div>
 
     <div class="box_sendWord">
-      <div class="box_sendWord_des">蟒蟒 看猹！</div>
+      <div class="box_sendWord_des">{{ sendword }}</div>
     </div>
   </div>
 </template>

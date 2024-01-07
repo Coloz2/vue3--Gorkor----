@@ -29,15 +29,16 @@ import { ref, reactive } from "vue";
         <span>通知</span>
       </template>
     </select-box>
-
-    <select-box>
-      <template #photo>
-        <img src="../../assets/images/home.png" class="limg" alt="" />
-      </template>
-      <template #title>
-        <span>商城</span>
-      </template>
-    </select-box>
+    <router-link to="/shop/stamp">
+      <select-box>
+        <template #photo>
+          <img src="../../assets/images/home.png" class="limg" alt="" />
+        </template>
+        <template #title>
+          <span>商城</span>
+        </template>
+      </select-box>
+    </router-link>
     <select-box>
       <template #photo>
         <img src="../../assets/images/home.png" class="limg" alt="" />

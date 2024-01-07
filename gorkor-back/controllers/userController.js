@@ -62,20 +62,24 @@ const createPasser = async (req, res) => {
 
 //是否有未读信件
 const unread = async (id) => {
-  const res = await acceptLetter.findOne({
+  const res = await acceptLetter.findAll({
     where: {
       receiverId: {
         [Op.eq]: id,
       },
     },
     attributes: ["isRead"],
+    raw: true,
     // 指定要查询的字段
   });
-  const isRead = res?.dataValues.isRead;
-  if (isRead !== true) {
-    return false;
-  } else {
+
+  //查找已读字段
+  const isRead = res.some((item) => item.isRead == true);
+
+  if (isRead == true) {
     return true;
+  } else {
+    return false;
   }
 };
 
@@ -87,20 +91,6 @@ const emailCount = async (id) => {
     },
   });
   return res;
-};
-
-//计算权重
-const userWeight = async (id) => {
-  const hasUnread = await unread(id);
-  // console.log("isRead----------" + isRead);
-  const count = await emailCount(id);
-  const options = {
-    hasUnread,
-    count,
-  };
-  const weight = passer.calculateWeight(options);
-
-  return weight;
 };
 
 //token
@@ -143,7 +133,21 @@ const jwtToken = async (username, password, req, res) => {
 };
 
 //更新权重
-const updateWeight = async (id) => {
+export const updateWeight = async (id) => {
+  //计算权重
+  const userWeight = async (id) => {
+    const hasUnread = await unread(id);
+    // console.log("isRead----------" + isRead);
+    const count = await emailCount(id);
+    const options = {
+      hasUnread,
+      count,
+    };
+    const weight = passer.calculateWeight(options);
+
+    return weight;
+  };
+
   const weight = await userWeight(id);
   const res = await passer.update({ weight }, { where: { id } });
   console.log(res);

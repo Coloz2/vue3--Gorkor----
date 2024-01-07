@@ -13,10 +13,10 @@ const draftsSchema = async () => {
         type: DataTypes.TEXT("long"),
         allowNull: true,
       },
-      type: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+      // type: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
+      // },
       receiverId: {
         type: DataTypes.STRING,
         allowNull: true,

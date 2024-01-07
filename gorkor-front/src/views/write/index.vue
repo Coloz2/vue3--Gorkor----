@@ -7,21 +7,30 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const textarea1 = ref("");
 const ListStroe = useletterStore();
-const type = ref("random");
 const myTextarea = ref(null); // 创建 ref
 //首次打开从数据库请求数据 后面从Pinia请求
 // const lControl = ref(false);
 //创造或者更新
+const props = defineProps({
+  id: {
+    type: String,
+    default: "0",
+  },
+});
+
 function save(value, id) {
+  console.log("----------ID------------");
+  console.log(id);
   const item = ListStroe.letterObj.find((item) => item.receiverId == id);
   console.log(item);
-  console.log("-------");
+  console.log(id);
+  console.log("-SAVE--SAVE----");
   if (item) {
     console.log("abcdefg");
     ListStroe.SETCONTENT_FRONT(value, id);
   } else {
     console.log("b");
-    ListStroe.createLetter(value, id);
+    ListStroe.createLetter(value, props.id);
   }
 }
 
@@ -29,12 +38,13 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const sendData = () => {
-  router.push({ name: "priView", params: { id: 0 } });
+  router.push({ name: "priView", params: { id: props.id } });
   console.log(textarea1.value);
   save(textarea1.value, 0);
 };
 
 onMounted(async () => {
+  console.log(props.id);
   // 注册全局事件 关闭保存
   window.onbeforeunload = async function () {
     save(textarea1.value, 0);
@@ -44,15 +54,18 @@ onMounted(async () => {
     const res = await codDrafts(allLetter);
     console.log(res);
   };
+
   //获取pinia中的数据 赋值给文本框
   const letter = await import(/* @vite-ignore */ "@/stores/letterData.js");
   const letterStore = letter.useletterStore();
-  textarea1.value = letterStore.GETCONTENT(0);
+  console.log(props.id);
+  textarea1.value = letterStore.GETCONTENT(props.id);
+  console.log(letterStore.GETCONTENT(props.id));
 });
 
 onBeforeUnmount(() => {
   //在当前页面关闭时保存数据
-  save(textarea1.value, 0);
+  save(textarea1.value, props.id);
 });
 
 // const checkOverflow = () => {

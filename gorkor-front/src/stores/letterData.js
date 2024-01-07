@@ -10,10 +10,9 @@ export const useletterStore = defineStore("letter", () => {
   const isRequest = ref(false);
   const createLetter = (data, role) => {
     letterObj.value.push({
-      content: "",
-      receiverId: 0,
+      content: data,
+      receiverId: role,
       senderId: user.GETUSERINFO().id,
-      type: "random",
     });
   };
 
@@ -48,8 +47,10 @@ export const useletterStore = defineStore("letter", () => {
 
   //获取数据 从pinia
   const GETCONTENT = (id) => {
+    console.log("-------------------");
     const index = getIndex(id);
-    if (index) {
+    console.log(index);
+    if (index !== -1) {
       return letterObj.value[index].content;
     }
   };

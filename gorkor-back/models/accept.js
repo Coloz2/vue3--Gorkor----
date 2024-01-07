@@ -2,15 +2,11 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/database.js";
 
 const acceptSchema = async () => {
-  class acceptModel extends Model {
-    print() {
-      console.log("gg");
-    }
-  }
+  class acceptModel extends Model {}
   acceptModel.init(
     {
       senderId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       bgUrl: {
@@ -33,6 +29,10 @@ const acceptSchema = async () => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      pNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       sendLoginAt: {
         type: DataTypes.DATE,

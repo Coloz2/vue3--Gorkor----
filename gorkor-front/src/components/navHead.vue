@@ -41,6 +41,7 @@ const goback = () => {
   &_mid {
     flex: 6;
     span {
+      color: #693154;
       @include flex-box-set(center, center);
     }
   }
