@@ -261,7 +261,7 @@ export const anyUnread = async (req, res) => {
       raw: true,
     });
 
-    //格式处理
+    // 格式处理;
     const data = sendword.map((item) => {
       const accepts = {};
       for (const key in item) {

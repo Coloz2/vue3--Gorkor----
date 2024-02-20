@@ -4,13 +4,6 @@ import { acceptLetter } from "../models/rebirth.js";
 import { promisify } from "util";
 import jwt from "jsonwebtoken";
 import { Op } from "sequelize";
-//获取token
-
-const gettoken = (uid) => {
-  return jwt.sign({ id: uid }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
 
 //注册
 const createPasser = async (req, res) => {
@@ -91,6 +84,14 @@ const emailCount = async (id) => {
     },
   });
   return res;
+};
+
+//获取token
+
+const gettoken = (uid) => {
+  return jwt.sign({ id: uid }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 };
 
 //token

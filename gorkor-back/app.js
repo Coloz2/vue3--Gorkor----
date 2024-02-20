@@ -5,18 +5,20 @@ import passerRouter from "./routes/userRoutes.js";
 import papperRouter from "./routes/papperRoute.js";
 import acceptRouter from "./routes/acceptRoutes.js";
 import draftsRouter from "./routes/draftsRoutes.js";
+import qusRouter from "./routes/questionRoute.js";
+import disRoute from "./routes/disRoutes.js";
 import cors from "cors";
 import { scheduler } from "./middleware/scheduler.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { protect } from "./middleware/protect.js";
+import cookieParser from "cookie-parser";
+
 const app = Express();
 
 app.use(Express.json());
 // 在 Express 中的例子
 app.use((req, res, next) => {
-  console.log("Hello from the middleware 👋");
   // 替换 '*' 为实际的前端源地址
   const allowedOrigin = "http://localhost:5173";
 
@@ -29,6 +31,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -60,4 +64,6 @@ app.use("/api/passer", passerRouter);
 app.use("/api/bg", papperRouter);
 app.use("/api/accept", acceptRouter);
 app.use("/api/drafts", draftsRouter);
+app.use("/api/qus", qusRouter);
+app.use("/api/dis", disRoute);
 export default app;

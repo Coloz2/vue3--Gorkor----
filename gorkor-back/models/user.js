@@ -137,7 +137,6 @@ const userSchema = async () => {
   userModel.beforeCreate(async (userModel) => {
     const hashPassword = await bcrypt.hash(userModel.password, 10);
     userModel.password = hashPassword;
-
     const cid = userModel.id.split("-").shift();
     userModel.dataValues.id = cid;
   });

@@ -48,36 +48,57 @@
 
 // console.log("选择的用户:", selectedUser);
 
-function numberToChinese(num) {
-  const chineseDigits = [
-    "零",
-    "壹",
-    "贰",
-    "叁",
-    "肆",
-    "伍",
-    "陆",
-    "柒",
-    "捌",
-    "玖",
-  ];
+// function numberToChinese(num) {
+//   const chineseDigits = [
+//     "零",
+//     "壹",
+//     "贰",
+//     "叁",
+//     "肆",
+//     "伍",
+//     "陆",
+//     "柒",
+//     "捌",
+//     "玖",
+//   ];
 
-  // 将数字转换为字符串，并在前面补零到三位数
-  const numStr = String(num).padStart(3, "0");
-  console.log(numStr);
-  // 遍历每一位数字，进行转换
-  const result = numStr
-    .split("")
-    .map((digit, index) => {
-      if (digit === "0" && index === 0) {
-        return "零";
-      } else {
-        return chineseDigits[parseInt(digit, 10)];
-      }
-    })
-    .join("");
+//   // 将数字转换为字符串，并在前面补零到三位数
+//   const numStr = String(num).padStart(3, "0");
+//   console.log(numStr);
+//   // 遍历每一位数字，进行转换
+//   const result = numStr
+//     .split("")
+//     .map((digit, index) => {
+//       if (digit === "0" && index === 0) {
+//         return "零";
+//       } else {
+//         return chineseDigits[parseInt(digit, 10)];
+//       }
+//     })
+//     .join("");
 
-  return result || "零"; // 如果结果为空字符串，则返回'零'
-}
+//   return result || "零"; // 如果结果为空字符串，则返回'零'
+// }
 
-console.log(numberToChinese(7));
+// console.log(numberToChinese(7));
+
+// const responseData = [
+//   {
+//     id: 1,
+//     text: "你多大纳",
+//     sendLoginAt: "2024-01-06T07:39:37.000Z",
+//   },
+//   {
+//     id: 2,
+//     text: "你多大纳",
+//     sendLoginAt: "2024-01-05T07:39:45.000Z",
+//   },
+//   // ... 其他对象
+// ];
+
+// const test = [];
+
+// test.push(...responseData);
+// console.log(test);
+
+console.log(8 % 17);

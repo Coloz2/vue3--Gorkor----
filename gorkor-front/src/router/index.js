@@ -93,6 +93,17 @@ const routes = [
     component: () => import("@/views/skeleton/index.vue"),
     props: (route) => ({ cid: route.params.cid, sid: route.params.sid }),
   },
+  {
+    path: "/question",
+    name: "question",
+    component: () => import("@/views/question/index.vue"),
+  },
+  {
+    path: "/everyday/:id",
+    name: "everyday",
+    component: () => import("@/views/everyday/index.vue"),
+    props: (route) => ({ id: route.params.id }),
+  },
 ];
 
 const router = createRouter({

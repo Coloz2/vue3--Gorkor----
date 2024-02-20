@@ -40,6 +40,7 @@ onMounted(() => getbanner());
 const unread = ref(false);
 const unreadCtx = ref(null);
 const color = "#693154";
+const scroll = ref(true);
 import { getAnyUnread, updateReadStatus } from "@/api/sendAPI.js";
 import numberToChinese from "@/utils/numberChange";
 
@@ -58,6 +59,8 @@ onMounted(async () => {
       });
       unreadCtx.value = data.data[0];
       unread.value = true;
+      //每日问题滚动区禁用
+      scroll.value = false;
     }
   }
 });
@@ -85,8 +88,10 @@ let moveVw = 0;
 // 视口宽度
 let startY = 0;
 //
+
 const letterwindow = ref(null);
 const handleup = () => {
+  console.log(document);
   const bodyWidth = letterwindow.value.clientHeight;
   const riseArea = Math.abs(distance) / bodyWidth;
   console.log(moveVw);
@@ -100,6 +105,8 @@ const handleup = () => {
     letterwindow.value.style.transform = `translateY(-${moveVw}vh)`;
     document.removeEventListener("touchmove", handleMove);
     document.removeEventListener("touchend", handleup);
+    //每日问题滚动允许
+    scroll.value = true;
   } else {
     moveVw = 0;
     letterwindow.value.style.transform = `translateY(-${moveVw}vh)`;
@@ -108,6 +115,9 @@ const handleup = () => {
 };
 
 const handleDown = (event) => {
+  console.log(document.getElementsByClassName("home_unread")[0]);
+  console.log(letterwindow.value);
+  // console.log(document);
   // console.log(e);
   document.addEventListener("touchmove", handleMove);
   document.addEventListener("touchend", handleup);
@@ -125,14 +135,29 @@ const handleMove = (event) => {
   letterwindow.value.style.transform = `translateY(calc(-${moveVw}vh - ${distance}px))`;
 };
 /////////
-const count = ref(10);
+import { getQues } from "@/api/questionAPI.js";
+
+//无线下拉变量
+
 const loading = ref(false);
-const noMore = computed(() => count.value >= 30);
+const noMore = computed(() => offset.value >= 30);
 const disabled = computed(() => loading.value || noMore.value);
-const load = () => {
+//每日问题列表
+const questionList = ref([]);
+//偏移量
+const offset = ref(0);
+const limit = ref(5);
+async function getList() {
+  const { data } = await getQues(offset.value, limit);
+  questionList.value.push(...data.data);
+}
+const load = async () => {
   loading.value = true;
-  setTimeout(() => {
-    count.value += 10;
+  await getList();
+  setTimeout(async () => {
+    await getList();
+    console.log(questionList.value);
+    offset.value += 5;
     loading.value = false;
   }, 2000);
 };
@@ -220,9 +245,28 @@ const load = () => {
           <span>{{ item.title }}</span>
         </div>
       </div>
-      <div class="home_roll" style="overflow: auto">
+      <div class="home_roll" :class="scroll ? 'show' : 'hide'">
         <ul v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
-          <li v-for="i in count" :key="i" class="home_roll_list">{{ i }}</li>
+          <router-link to="/question">
+            <li
+              v-for="(item, index) in questionList"
+              :key="index"
+              class="home_roll_list"
+            >
+              <div class="home_roll_list_head">
+                <div class="home_roll_list_head_left">
+                  <img src="../../../../assets/images/问题记录.png" alt="" />
+                </div>
+                <div class="home_roll_list_head_right">
+                  <p>每日问题</p>
+                  <p>2024-01-07 15:33</p>
+                </div>
+              </div>
+              <div class="home_roll_list_body">
+                <span>你相信星座的说法吗</span>
+              </div>
+            </li>
+          </router-link>
         </ul>
         <p
           v-if="loading"
@@ -243,6 +287,14 @@ const load = () => {
 </template>
 
 <style lang="scss" scoped>
+.hide {
+  max-height: 30rem;
+  overflow: hidden;
+}
+
+.show {
+  overflow: auto;
+}
 .infinite-list-wrapper {
   height: 300px;
   text-align: center;
@@ -268,8 +320,8 @@ const load = () => {
   @include wh(70%, 70%);
 }
 .home {
-  height: 93vh;
-  background-color: $brigecolor;
+  min-height: 93vh;
+  background-color: #efefef;
   &_unread {
     position: absolute;
     z-index: 10;
@@ -341,7 +393,7 @@ const load = () => {
     margin-bottom: 8rem;
     padding: 1rem 2rem;
     margin-top: 2rem;
-    height: 18rem;
+    height: 20rem;
     background-color: $color-white;
     display: grid;
     justify-items: center;
@@ -349,14 +401,16 @@ const load = () => {
     gap: 2rem;
     overflow: hidden;
     &_fbutton {
+      font-size: 1.3rem;
       @include flex-box2();
-      height: 7rem;
-      width: 5rem;
+      height: 8rem;
+      width: 6rem;
       &_photo {
         width: 100%;
         height: 5rem;
+
         .img {
-          @include wh(400%, 400%);
+          @include wh(400%, 450%);
           transform: translateX(-37%) translateY(-38%);
         }
       }
@@ -364,15 +418,37 @@ const load = () => {
   }
 
   &_roll {
+    overflow: hidden;
     z-index: 3;
     margin-top: 2rem;
     transform: translateY(-5rem);
     min-height: 20rem;
-    background-color: $color-white;
+    // background-color: $color-white;
     &_list {
       height: 13rem;
       margin-bottom: 3rem;
-      background-color: #9198e5;
+      background-color: #ffffff;
+      &_head {
+        @include flex-box-set(start, center);
+        font-size: 1.8rem;
+
+        color: rgb(190, 190, 190);
+        height: 8rem;
+        &_left {
+          height: 7rem;
+          width: 7rem;
+          @include flex-box-set(center, center);
+          img {
+            @include wh(60%, 60%);
+          }
+        }
+      }
+
+      &_body {
+        @include flex-box-set(start, center);
+        font-size: 2rem;
+        padding-left: 10%;
+      }
     }
   }
 }

@@ -13,6 +13,5 @@ import router from "./router/index";
 app.use(router);
 app.use(pinia);
 app.mount("#app");
-
 //
 //浏览器属性事件
